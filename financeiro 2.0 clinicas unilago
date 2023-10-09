@@ -1,0 +1,550 @@
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+function procedimento() {
+
+    $.ajax({
+            method: 'POST',
+            url: '/veterinaria/busca-protocolo',
+            data: $('#formulario').serialize(),
+
+            beforeSend: function() {
+
+
+            }
+        })
+        .done(function(ret) {
+            console.log(ret);
+
+            if (ret.status == true) {
+                if (ret.dados.length > 0) {
+                    $('#especialidade').append('<option value="" disabled selected>Selecione</option>')
+                    for (let i = 0; i < ret.dados.length; i++) {
+                        $('#especialidade').append('<option value="' + ret.dados[i].ID_CLINICA + '" VAL_REQ="$' +
+                            ret.dados[i].VAL_REQ + '" NOME="' + ret.dados[i].NM_TRC + '" TIPO="' + ret.dados[i]
+                            .CD_TRC + '" id="desc_receita">' + ret
+                            .dados[i].NM_TRC + '</option>')
+                    }
+                }
+            } else {
+
+            }
+        })
+        .fail(function(ret) {
+            console.log(ret)
+        })
+        .always(function() {
+
+        });
+
+    $(document).ready(function() {
+        $('#especialidade').on('change', function() {
+            var valReq = $(this).find('option:selected').attr('VAL_REQ');
+            var nome = $(this).find('option:selected').attr('NOME');
+            var tipo = $(this).find('option:selected').attr('TIPO')
+
+            $('#valor').val(valReq);
+            $('#desc_receita').val(nome);
+
+            var TIPORECEITA = tipo
+        });
+    });
+
+}
+</script>
+
+<script>
+procedimento()
+</script>
+
+<div class="col-sm-12 form-group">
+    <h1 class="text-center" style="margin-top:2%;">Finaceiro Medicina Veterinária</h1>
+</div>
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <h1 class="h3 mb-3">Paciente</h1>
+
+
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Registo do Paciente</h5>
+                </div>
+                <div class="card-body">
+                    <form id="formulario" action="" enctype='' method='post'>
+                        <div class="row">
+                            <button style="max-height: 60px; margin-top: 33px;" class="btn btn-outline-secundary"
+                                type="button" id="search">
+                                <i><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
+                                        viewBox="0 0 50 50">
+                                        <path
+                                            d="M 21 3 C 11.601563 3 4 10.601563 4 20 C 4 29.398438 11.601563 37 21 37 C 24.355469 37 27.460938 36.015625 30.09375 34.34375 L 42.375 46.625 L 46.625 42.375 L 34.5 30.28125 C 36.679688 27.421875 38 23.878906 38 20 C 38 10.601563 30.398438 3 21 3 Z M 21 7 C 28.199219 7 34 12.800781 34 20 C 34 27.199219 28.199219 33 21 33 C 13.800781 33 8 27.199219 8 20 C 8 12.800781 13.800781 7 21 7 Z">
+                                        </path>
+                                    </svg></i>
+                            </button>
+
+                            <a href="/auth/cadastrar">
+                                <button style="    max-height: 60px; margin-top: 33px;"
+                                    class="btn btn-outline-secundary" type="button" id="">
+                                    <i><img srcset="https://img.icons8.com/?size=256&id=11153&format=png"
+                                            style="width:20px; height:20px"></i>
+                                </button>
+                            </a>
+
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <!-- Conteúdo do modal -->
+                            <div class="modal-dialog" role="document" style="max-width: 80% !important">
+                                <div class="modal-content" ;>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Pacientes</h5>
+                                        <div class="col-7">
+                                            <label for="exampleFormControlInput1" class="form-label">Busca
+                                                Paciente</label>
+                                            <input type="text" class="form-control" id="exampleFormControlInput1"
+                                                required autocomplete="off">
+                                        </div>
+                                        <button style="    max-height: 60px; margin-top: 33px;"
+                                            class="btn btn-outline-secundary" type="button" id="searchButton">
+                                            <i><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20"
+                                                    height="20" viewBox="0 0 50 50">
+                                                    <path
+                                                        d="M 21 3 C 11.601563 3 4 10.601563 4 20 C 4 29.398438 11.601563 37 21 37 C 24.355469 37 27.460938 36.015625 30.09375 34.34375 L 42.375 46.625 L 46.625 42.375 L 34.5 30.28125 C 36.679688 27.421875 38 23.878906 38 20 C 38 10.601563 30.398438 3 21 3 Z M 21 7 C 28.199219 7 34 12.800781 34 20 C 34 27.199219 28.199219 33 21 33 C 13.800781 33 8 27.199219 8 20 C 8 12.800781 13.800781 7 21 7 Z">
+                                                    </path>
+                                                </svg></i>
+                                        </button>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="pacientesTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nome Paciente</th>
+                                                        <th>CPF</th>
+                                                        <th>RG</th>
+                                                        <th>Ações</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <tr>
+                                                        <td>Nome do Paciente 1</td>
+                                                        <td>CPF do Paciente 1</td>
+                                                        <td>RG do Paciente 1</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary "
+                                                                onclick="selecionarPaciente('Nome do Paciente 1', 'CPF do Paciente 1', 'RG do Paciente 1')">Selecionar</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row" style="margin-top: 20px;">
+                            <div class="col-7">
+                                <label for="exampleFormControlInput1" class="form-label">Nome
+                                    Paciente</label>
+                                <input type="text" class="form-control" value="TESTE" id="nm_usu" required
+                                    autocomplete="off" disabled>
+                            </div>
+
+                            <div class="col-4">
+                                <label for="exampleFormControlInput1" class="form-label">CPF</label>
+                                <input type="text" class="form-control CPF" disabled id="cpf_usu">
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-12">
+                                    <label for="exampleFormControlInput1" class="form-label">RG</label>
+                                    <input type="text" class="form-control" autocomplete="off" disabled id="rg_ret">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mb-12">
+                                    <label for="exampleFormControlInput1" class="form-label">Data-Nascimento</label>
+                                    <input class="form-control" name="data_ret" type="text" id="data_nascimento"
+                                        readonly />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-7">
+                                <label for="exampleFormControlInput1" class="form-label">Reponsavel</label>
+                                <input type="text" class="form-control" disabled id="nm_resp">
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-12">
+                                    <label for="exampleFormControlInput1" class="form-label">CPF</label>
+                                    <input type="text" class="form-control" autocomplete="off" disabled id="cpf_resp">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-12">
+                                    <label for="exampleFormControlInput1" class="form-label">RG</label>
+                                    <input type="text" class="form-control" autocomplete="off" disabled id="rg_resp">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top:15px;">
+                            <div class="col-6">
+                                <label for="especialidade" class="form-label">Procedimento</label>
+                                <select name="especialidade" id='especialidade' type="text"
+                                    class="form-control"></select>
+
+                            </div>
+                            <div class="col-2">
+                                <div class="mb-12">
+                                    <label for="exampleFormControlInput1" class="form-label">Valor</label>
+                                    <input style='width:130px;margin-bottom:20px;' type="text" class="form-control"
+                                        id="valor" autocomplete="off" disabled>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="mb-12" style="margin-top: 35px;">
+                                    <button type="button" onclick="salvarEInserirFinanceiro()"
+                                        class="btn btn-primary">Insirir</button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="cpf_id" name="cpf_id" value="">
+                        <div style="text-align: right;">
+                        </div>
+                    </form>
+                    <div class="col-md-12" style="margin-top:15px" id="mensagem"></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+
+
+<script>
+function insertFinanceiro(tipo) {
+    var CPF = $('.CPF').val().replace(/[^\d]/g, '');
+    var CPF_ID = $('#cpf_usu').attr('data-cpf-id');
+    var TIPORECEITA = $('#especialidade option:selected').attr('TIPO');
+    var valor = $('#valor').val();
+    var desc_receita = $('#desc_receita').val();
+
+    valor = valor.replace('$', '');
+
+    $.ajax({
+            method: 'POST',
+            url: '/veterinaria/cadastra-financeiro',
+            data: {
+                CPF: CPF,
+                CPF_ID: CPF_ID,
+                TIPORECEITA: TIPORECEITA,
+                valor: valor,
+                desc_receita: desc_receita
+
+            },
+
+            beforeSend: function() {
+                $('#mensagem').html('');
+                $('#btn_cadastrar').html('Cadastrando...');
+                $('#btn_cadastrar').prop('disabled', true);
+            },
+            success: function(ret) {
+                if (ret.status == true) {
+                    $('#mensagem').html(`<div class="alert alert-success" role="alert">Cadastrado</div>`)
+                } else {
+                    $('#mensagem').html(`<div class="alert alert-danger" role="alert">` + ret.msg + `</div>`);
+                }
+            }
+        })
+        .done(function(ret) {
+            //  console.log(ret);
+            if (ret.status == true) {
+                if (ret.dados.length > 0) {
+
+                }
+            } else {
+
+            }
+        })
+        .fail(function(ret) {
+            console.log(ret)
+        })
+        .always(function() {
+
+        });
+
+}
+
+$(document).ready(function() {
+    $("#myselect2").select2({
+        width: 'resolve'
+    });
+});
+
+
+
+function abrirModal() {
+    var modal = document.getElementById('selectModal');
+    if (modal) {
+
+        $('#exampleModal').modal('show')
+    } else {
+        console.error("O modal com ID 'selectModal' não foi encontrado.");
+    }
+}
+
+$(document).ready(function() {
+
+    $('#seuBotaoQueAbreOModal').click(function() {
+        abrirModal();
+    });
+});
+
+
+
+document.getElementById('search').addEventListener('click', abrirModal);
+
+
+function buscarInfomacoes(nome) {
+
+    $('#pacientesTable tbody').empty();
+
+    $.ajax({
+            method: 'POST',
+            url: '/auth/busca-paciente-novo',
+            data: {
+                nome: nome
+            },
+            beforeSend: function() {}
+        })
+        .done(function(ret) {
+            if (ret.status == true) {
+                if (ret.dados.length > 0) {
+                    for (const paciente of ret.dados) {
+                        var newRow = '<tr>' +
+                            '<td>' + paciente['NM_PACIENTE'] + '</td>' +
+                            '<td>' + paciente['CPF'] + '</td>' +
+                            '<td>' + paciente['RG'] + '</td>' +
+                            '<td><button type="button" class="btn btn-primary" onclick="selecionarPaciente(\'' +
+                            paciente['NM_PACIENTE'] + '\', \'' + paciente['CPF'] + '\', \'' + paciente['RG'] +
+                            '\', \'' +
+                            paciente['DT_NASC'] + '\',\'' + paciente['NM_RESP'] + '\', \'' + paciente['CPF_RESP'] +
+                            '\' , \'' +
+                            paciente['RG_RESP'] + '\' , \'' + paciente['CD_PACIENTE'] +
+                            '\' )">Selecionar</button></td>' +
+
+                            $('#pacientesTable tbody').append(newRow);
+                    }
+                }
+            } else {}
+        })
+        .fail(function(ret) {
+            console.log(ret);
+        })
+        .always(function() {});
+}
+
+function selecionarPaciente(nome, cpf, rg, nasc, resp, respcpf, resprg, cpfId) {
+    var cpfSemEspeciais = cpf.replace(/[^\d]/g, '');
+
+    document.getElementById('nm_usu').value = nome;
+    document.getElementById('cpf_usu').value = cpf;
+    document.getElementById('cpf_usu').setAttribute('data-cpf-id', cpfId);
+    document.getElementById('rg_ret').value = rg;
+    document.getElementById('data_nascimento').value = nasc;
+    document.getElementById('nm_resp').value = resp
+    document.getElementById('cpf_resp').value = respcpf;
+    document.getElementById('rg_resp').value = resprg;
+
+    var cpfSemEspeciais = cpf.replace(/[^\d]/g, '');
+
+    console.log("CPF: " + cpf);
+    console.log("CPF_ID: " + cpfId);
+
+    alunoNome = nome
+
+    $('#exampleModal').modal('hide')
+
+
+    function preencherTabela() {
+        $.ajax({
+            url: 'recebe-paciente',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'CPF_ID': cpfId,
+                'CPF': cpfSemEspeciais
+            },
+            success: function(data) {
+                $('#listaAlunos').empty();
+
+                if (Array.isArray(data.dados)) {
+                    $.each(data.dados, function(index, aluno) {
+                        var row = '<tr>' +
+                            '<td>' + aluno.COD + '</td>' +
+                            '<td>' + aluno.PROCEDIMENTO + '</td>' +
+                            '<td>' + aluno.VALOR + '</td>' +
+                            '<td>' + aluno.SITUACAO + '</td>' +
+                            '<td>' + aluno.DATA_PAGO + '</td>' +
+                            '<td>' + aluno.DATA_INSERIDO + '</td>' +
+                            '<td><button class="btn btn-success">Receber</button></td>' +
+                            '<td>' +
+                            '<button class="btn btn-danger apagar-button" data-cod="' + aluno.COD + '">' + 'Apagar' + ' ' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="15px" height="15px" viewBox="0 0 10 10" enable-background="new 0 0 10 10" xml:space="preserve">' +
+                            '<image id="image0" width="10" height="10" x="0" y="0" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAABGdBTUEAALGPC/xhBQAAACBjSFJN AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZ cwAAA7EAAAOxAfWD7UkAAAAHdElNRQfnCgkNBAMFkNFcAAAAjElEQVQI1yXMMY4BUQAA0Pd/fiJR rZ5kRSMbCvVWzqFzkD2E24hSonIC9RZiSFgMMfNji2lf8QJmBp5eDgorSIJS30BQqHVs/AYQffg0 NvFl6ydh7ltWSSpHS3XCyFT2p2tnaEHCXqX08HB3cyaiENV4C0rXBo+okQVX9wZPsowsung250nU Q1vL2ot/eEIwKTPP4EsAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjMtMTAtMDlUMTM6MDQ6MDMrMDA6 MDCVPsl1AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIzLTEwLTA5VDEzOjA0OjAzKzAwOjAw5GNxyQAA ACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyMy0xMC0wOVQxMzowNDowMyswMDowMLN2UBYAAAAZdEVY dFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC"/>' +
+                            '</button>' +
+                            '</td>' +
+                            '</tr>';
+                            $('#listaAlunos').append(row);
+                    });
+                }
+            },
+
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    $(document).on('click', '.apagar-button', function() {
+        var COD = $(this).data('cod');
+        $.ajax({
+            url: 'apagar-recebe', // O URL da ação do controlador para apagar
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'COD': COD
+            },
+            success: function(data) {
+                if (data.status) {
+                    // Atualize a tabela ou faça qualquer outra ação necessária
+                    preencherTabela()
+                } else {
+                    console.error('Erro ao apagar registro');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+
+    preencherTabela()
+
+}
+
+
+
+document.getElementById('search').addEventListener('click', function() {
+
+    $('#exampleModal').modal('show')
+
+});
+
+document.getElementById('searchButton').addEventListener('click', function() {
+    const nome = document.getElementById('exampleFormControlInput1').value;
+    buscarInfomacoes(nome);
+});
+
+
+
+$(document).ready(function() {
+    $('#curso').on('change', function() {
+        var selectedValue = $(this).val();
+        if (selectedValue !== "") {
+            $('#exampleFormControlInput1').val(selectedValue);
+
+            $.ajax({
+                    method: 'POST',
+                    url: '/auth/busca-paciente-novo',
+                    data: {
+                        nome: selectedValue
+                    }
+                })
+                .done(function(ret) {
+                    if (ret.status == true && ret.dados.length > 0) {
+                        $('#cpf_usu').val(ret.dados[0]['CPF']);
+                        $('#rg_ret').val(ret.dados[0]['RG']);
+                        $('#nm_resp').val(ret.dados[0]['NM_RESP']);
+                        $('#cpf_resp').val(ret.dados[0]['CPF_RESP']);
+                        $('#rg_resp').val(ret.dados[0]['RG_RESP']);
+                    } else {
+                        $('#cpf_usu').val("");
+                        $('#rg_ret').val("");
+                        $('#nm_resp').val("");
+                        $('#cpf_resp').val("");
+                        $('#rg_resp').val("");
+
+                    }
+                })
+                .fail(function(ret) {
+                    console.log(ret);
+                });
+        } else {
+
+            $('#exampleFormControlInput1').val("");
+            $('#cpf_usu').val("");
+            $('#rg_ret').val("");
+        }
+    });
+});
+
+$(document).ready(function() {
+
+
+
+    var nomePacienteSelecionado = '';
+
+});
+</script>
+
+
+<div class="row">
+
+    <div id="m_erro" class="col-sm-12" style="margin-top: 1%">
+
+    </div>
+
+    <div class="col-sm-12 form-group">
+        <table id="alunos" class="table table-striped table-responsive-sm">
+            <thead>
+                <th class="text-center" style="width:200px;">ID</th>
+                <th class="text-center">Procedimento</th>
+                <th class="text-center" style="width:80px;">Valor</th>
+                <th class="text-center" style="width:80px;">Situação</th>
+                <th class="text-center" style="width:80px;">Data Pago</th>
+                <th class="text-center" style="width:80px;">Data Inserido</th>
+                <th class="text-center" style="width:80px;">Receber</th>
+                <th class="text-center" style="width:80px;">Apagar</th>
+            </thead>
+
+            <tbody id="listaAlunos" class="text-center">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function salvarEInserirFinanceiro() {
+    insertFinanceiro();
+}
+</script>
